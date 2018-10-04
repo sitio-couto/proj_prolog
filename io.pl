@@ -1,7 +1,8 @@
 % swipl -q -g main proj2.pl < trechos
 main :- eof(I), write(I).
 
-eof(I) :- readln(L), L\=[] -> (eof(Ls), I=[L|Ls]); (I = []).
+eof(I) :- readln(L), L\=[] ->
+  (eof(Ls), [Lh|_]=L, atom_codes(Lh,Lc), I=[Lc|Ls]); (I = []).
 
 % input(I,S) :- lines(I,L,R), clean([L|R],S).
 % lines([],[],[]).

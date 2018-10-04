@@ -1,25 +1,17 @@
-% ["xxxxxababababyyyyyy","yyaaaaaaaaaaa","yyyyyyeeeeeeeeeeeeee","cccccccccccccccxxxxx","fffffffffffffffwwwwww","wwwwwwgggggggggggxx"]
-% xxxxxababababyyyyyy\nyyaaaaaaaaaaa\nyyyyyyeeeeeeeeeeeeee\ncccccccccccccccxxxxx\nfffffffffffffffwwwwww\nwwwwwwgggggggggggxx
-main :- eof(I), output(I).
+main :- eof(I), fold(I,O), show(O).
 
-eof(I) :- readln(L), L\=[] ->
-  (eof(Ls), [Lh|_]=L, atom_codes(Lh,Lc), I=[Lc|Ls]); (I = []).
+eof(I) :- readln([L|_]) -> (eof(Ls), atom_codes(L,Lc), I=[Lc|Ls]) ; I = [].
 
-output(L) :- iterate(L,R), show(R).
-show([Z|Zs]) :- format("~s~n",[Z]), show(Zs).
-show([]).
+show([Z|Zs]) :- Z\=[] -> format("~s~n",[Z]), show(Zs) ; !.
 
-iterate([],[]).
-iterate([L|Ls],R) :-
-  combine(L,Ls,H,Hs) -> iterate([H|Hs],R) ; (iterate(Ls,Z), R = [L|Z]).
+fold([],[]).
+fold([L|Ls],R) :- comb(L,Ls,H,Hs) -> fold([H|Hs],R) ; (fold(Ls,Z), R = [L|Z]).
 
 % Try to combine strings A-B or B-A util match or list end.
-combine(H,[L|Ls],R,Rs) :- (joinstr(H,L,R) ; joinstr(L,H,R)), Rs = Ls.
-combine(H,[L|Ls],R,Rs) :- combine(H,Ls,R,T), Rs = [L|T].
+comb(H,[L|Ls],R,Rs) :- (join(H,L,R);join(L,H,R))->Rs=Ls;comb(H,Ls,R,T),Rs=[L|T].
 
 % Join strings
-joinstr(A,B,L) :-
-  intersect(A,B,I), length(I,N), N > 3, drop(B,N,R), append(A,R,L).
+join(A,B,L) :- intersect(A,B,I), length(I,N), N > 3, drop(B,N,R), append(A,R,L).
 
 drop(B,0,B).
 drop([_|Bs],N,R) :- X is N-1, drop(Bs,X,R).

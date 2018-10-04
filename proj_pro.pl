@@ -16,4 +16,5 @@ drop([_|Bs],N,R) :- N\=1 -> (X is N-1, drop(Bs,X,R)) ; R=Bs.
 
 % Check if B can be appended to A, returns the instersection.
 intersect([A|As],B,C) :- substr([A|As],B) -> C = [A|As] ; intersect(As,B,C).
-substr([A|As],[B|Bs]) :- A\=[], A==B, substr(As,Bs).
+substr([A|As],[B|Bs]) :- A==B, substr(As,Bs).
+substr([],_).

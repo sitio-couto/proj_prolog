@@ -3,7 +3,7 @@
 % Main function, read input, compute, print output
 main :-
     readpred,
-    findall(_,pred(seq(_),seq(_),_),_),
+    pred(seq(_),seq(_),_), fail;
     findall(A, seq(A), E), maplist(writeln, E).
 
 % Read input and assert predicate
